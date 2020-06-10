@@ -253,8 +253,10 @@ void start_agent(int is_startup)
                         snprintf(msg, OS_MAXSTR, OS_AG_STARTED,
                                  keys.keyentries[0]->name,
                                  keys.keyentries[0]->ip->ip);
-                        snprintf(fmsg, OS_MAXSTR, "%c:%s:%s", LOCALFILE_MQ,
-                                 "ossec", msg);
+                        if (snprintf(fmsg, OS_MAXSTR, "%c:%s:%s", LOCALFILE_MQ,
+                                 "ossec", msg) >= OS_MAXSTR) {
+                            mwarn("Message sent to server could not store all information");
+                        }
                         send_msg(fmsg, -1);
                     }
                     return;
